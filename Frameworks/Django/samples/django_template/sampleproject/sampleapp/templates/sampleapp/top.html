@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="welcome">
+  <h1 class="title">Django sampleproject のページ</h1>
+  <a class="btn btn-primary" href="{% url 'sample_new' %}">テキストの新規登録</a>
+</div>
+
+<h3>DB登録情報</h3>
+
+{% if sampleapp %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>登録者</th>
+      <th>登録日</th>
+      <th>タイトル</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for sample in sampleapp %}
+    <tr>
+      <th>{{ sample.created_by.username }}</th>
+      <th>{{ sample.created_at }}</th>
+      <th><a href="{% url 'sample_detail' sample.id %}">{{ sample.title }}</a></th>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>登録情報がありません</p>
+{% endif %}
+{% endblock %}

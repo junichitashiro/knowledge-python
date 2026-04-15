@@ -1,0 +1,10 @@
+# skip 1
+read 1
+# skip 2
+read 2
+# skip 3
+read 3
+# skip 4
+read 4
+# skip 5
+read 5
