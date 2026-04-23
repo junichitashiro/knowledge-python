@@ -1,5 +1,4 @@
-import matplotlib.pyplot as plt
-import matplotlib.font_manager as fm
+from matplotlib import pyplot as plt
 import pandas as pd
 import seaborn as sns
 
