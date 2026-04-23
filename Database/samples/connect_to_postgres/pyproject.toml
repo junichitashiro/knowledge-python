@@ -1,5 +1,5 @@
 [project]
-name = "conn-to-postgres"
+name = "connect-to-postgres"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"

@@ -11,7 +11,7 @@ resolution-markers = [
 ]
 
 [[package]]
-name = "conn-to-sqlite3"
+name = "connect-to-sqlite3"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
