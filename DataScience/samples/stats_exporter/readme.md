@@ -28,11 +28,11 @@
 
 #### 基本統計量.xlsx
 
-![](基本統計量.xlsx.png)
+![](images\基本統計量.xlsx.png)
 
 #### 相関係数.xlsx
 
-![](相関係数.xlsx.png)
+![](images\相関係数.xlsx.png)
 
 #### 相関係数.png
 
