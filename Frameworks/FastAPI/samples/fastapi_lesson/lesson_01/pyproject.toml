@@ -1,0 +1,15 @@
+[project]
+name = "lesson_01"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.135.2",
+    "uvicorn>=0.42.0",
+]
+
+[tool.uv.workspace]
+members = [
+    "lesson_01",
+]

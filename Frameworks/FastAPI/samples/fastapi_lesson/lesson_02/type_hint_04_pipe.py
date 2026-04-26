@@ -10,4 +10,6 @@ def parse_input(value: int | str) -> str:
 # 呼び出し
 parse_input(123)
 parse_input("abc")
-parse_input(123.4)
+
+# 警告が表示されるパターン
+# parse_input(123.4)
