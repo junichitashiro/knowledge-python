@@ -1,0 +1,103 @@
+import customtkinter as ctk
+
+
+def on_switch_changed(var: ctk.StringVar, target) -> None:
+    """CTkSwitch の状態に応じて、対になる入力ウィジェットを制御する
+
+    Parameters
+        var : ctk.StringVar
+            スイッチの状態を保持する変数（'on' / 'off'）
+        target : CTk widget
+            スイッチと対になる入力UI（Entry または OptionMenu / ComboBox）
+
+    Behavior
+        - OFF : 入力値をクリアし、操作不可にする
+        - ON  : 操作可能にする
+    """
+    # スイッチが off になっているかどうかの真偽値を格納する
+    is_off = var.get() == "off"
+
+    # インスタンスで Entry かどうかを判定する
+    if isinstance(target, ctk.CTkEntry):
+        if is_off:
+            target.delete(0, ctk.END)
+            target.configure(state="disabled")
+        else:
+            target.configure(state="normal")
+
+    # インスタンスで メニュー系 かどうかを判定する
+    elif isinstance(target, (ctk.CTkOptionMenu, ctk.CTkComboBox)):
+        target_var = target.cget("variable")  # StringVar
+        if is_off:
+            if target_var is not None:
+                # 未選択状態にする
+                target_var.set("")
+            target.configure(state="disabled")
+        else:
+            target.configure(state="normal")
+            # 先頭表示メニューに戻す（初期値代入でも問題なし）
+            target_var.set(category_menu.cget("values")[0])
+
+
+# --------------------
+# GUIの設定
+# --------------------
+# 基本設定
+app = ctk.CTk()
+app.title("スイッチでウィジェットを制御する")
+app.geometry("350x200")
+# 1列目を伸縮させる
+app.grid_columnconfigure(0, weight=1)
+
+# --------------------
+# 入力フィールド
+# --------------------
+name_entry = ctk.CTkEntry(app)
+
+# --------------------
+# 対になるスイッチ
+# --------------------
+entry_switch_var = ctk.StringVar(value="on")
+entry_switch = ctk.CTkSwitch(
+    app,
+    text="off | on",
+    variable=entry_switch_var,
+    onvalue="on",
+    offvalue="off",
+    command=lambda: on_switch_changed(entry_switch_var, name_entry),
+)
+
+# --------------------
+# オプションメニュー
+# --------------------
+menu_var = ctk.StringVar(value="A")
+category_menu = ctk.CTkOptionMenu(app, values=["A", "B", "C"], variable=menu_var)
+
+# --------------------
+# 対になるスイッチ
+# --------------------
+menu_switch_var = ctk.StringVar(value="on")
+menu_switch = ctk.CTkSwitch(
+    app,
+    text="off | on",
+    variable=menu_switch_var,
+    onvalue="on",
+    offvalue="off",
+    command=lambda: on_switch_changed(menu_switch_var, category_menu),
+)
+
+# --------------------
+# 配置
+# --------------------
+# グリッド1行目に配置
+name_entry.grid(row=0, column=0, padx=10, pady=15, sticky="ew")
+entry_switch.grid(row=0, column=1, padx=10, pady=15, sticky="w")
+
+# グリッド2行目に配置
+category_menu.grid(row=1, column=0, padx=10, pady=15, sticky="ew")
+menu_switch.grid(row=1, column=1, padx=10, pady=15, sticky="w")
+
+# ====================
+# アプリの実行
+# ====================
+app.mainloop()
