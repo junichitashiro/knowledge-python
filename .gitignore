@@ -1,0 +1,5 @@
+# knowledge-python/.gitignore
+__pycache__/
+*.pyc
+*.pyo
+.venv/
