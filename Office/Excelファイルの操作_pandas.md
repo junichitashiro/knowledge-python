@@ -22,15 +22,15 @@
 
 ## read_excel()関数 を使った基本動作
 
-* 1回の関数呼び出しで直接データフレームを取得する
-* 毎回Excelファイルを開くため複数シートを読む場合は非効率
+- 1回の関数呼び出しで直接データフレームを取得する
+- 毎回Excelファイルを開くため複数シートを読む場合は非効率
 
 ### シートを指定してデータフレームに格納する
 
 ```python
 import pandas as pd
 
-df = pd.read_excel('test.xlsx', sheet_name='Sheet1', header=None)
+df = pd.read_excel("test.xlsx", sheet_name="Sheet1", header=None)
 print(df)
 ```
 
@@ -45,12 +45,12 @@ print(df)
 
 ### 特定のセルの値を取得する
 
-* ヘッダの有無で扱いが変わるためここでは header=None を指定する
+- ヘッダの有無で扱いが変わるためここでは `header=None` を指定する
 
 ```python
 import pandas as pd
 
-df = pd.read_excel('test.xlsx', sheet_name='Sheet1', header=None)
+df = pd.read_excel("test.xlsx", sheet_name="Sheet1", header=None)
 print(df.iloc[1, 1])
 ```
 ### 実行結果
@@ -64,7 +64,7 @@ print(df.iloc[1, 1])
 ```python
 import pandas as pd
 
-dfs = pd.read_excel('test.xlsx', sheet_name=None)
+dfs = pd.read_excel("test.xlsx", sheet_name=None)
 print(dfs.keys())
 ```
 #### 実行結果
@@ -76,8 +76,8 @@ print(dfs.keys())
 ```python
 import pandas as pd
 
-dfs = pd.read_excel('test.xlsx', sheet_name=None)
-print(dfs['Sheet2'])
+dfs = pd.read_excel("test.xlsx", sheet_name=None)
+print(dfs["Sheet2"])
 ```
 #### 実行結果
 
@@ -91,9 +91,9 @@ print(dfs['Sheet2'])
 
 ## ExcelFile()関数 を使った基本動作
 
-* 最初にExcelファイル全体を読み込んでメモリ上に展開し、必要なシートを後で取得できる
-* シート名の一覧を取得できる
-* 複数のシートを読むときに高速
+- 最初にExcelファイル全体を読み込んでメモリ上に展開し、必要なシートを後で取得できる
+- シート名の一覧を取得できる
+- 複数のシートを読むときに高速
 
 ### Excelファイル（全体）を読み込む
 
