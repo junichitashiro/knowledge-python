@@ -1,23 +1,32 @@
+from pathlib import Path
 from openpyxl import load_workbook
 from openpyxl.drawing.image import Image
 
-image_file = "image/sample.png"  # 画像ファイルのパス
-excel_file = "sample.xlsx"  # Excelファイルのパス
-sheet_name = "Sheet1"  # ワークシート名
-cell_range = "B11"  # 貼り付けるセル位置
+IMAGE_FILE = Path("image/sample.png")
+EXCEL_FILE = Path("sample.xlsx")
+SHEET_NAME = "Sheet1"
+CELL_RANGE = "B11"
 
-# Excelファイルを読み込む
-wb = load_workbook(excel_file)
 
-# 指定した名前のシートが存在しなかったら追加する
-if sheet_name not in wb.sheetnames:
-    ws = wb.create_sheet(title=sheet_name)
+def insert_image_to_excel(
+    excel_path: Path,
+    image_path: Path,
+    sheet_name: str,
+    cell: str,
+) -> None:
+    """
+    Excelの指定シート・セルに画像を挿入して上書き保存する。
 
-# 画像をワークシートに貼り付ける
-ws = wb[sheet_name]
-img = Image(image_file)
-ws.add_image(img, cell_range)
+    シートが存在しない場合は新規作成する。
+    """
+    wb = load_workbook(excel_path)
 
-# Excelファイルを上書き保存する
-wb.save(excel_file)
-print(f"{sheet_name} シートの {cell_range} セルに画像を追加")
+    # シートがなければ作成、あればそのまま取得
+    ws = wb[sheet_name] if sheet_name in wb.sheetnames else wb.create_sheet(title=sheet_name)
+
+    ws.add_image(Image(image_path), cell)
+    wb.save(excel_path)
+    print(f"{sheet_name} シートの {cell} セルに画像を追加")
+
+
+insert_image_to_excel(EXCEL_FILE, IMAGE_FILE, SHEET_NAME, CELL_RANGE)
