@@ -14,17 +14,17 @@
 
 #### Tor Expert Bundle を使用する
 
-* [公式サイト](https://www.torproject.org/ja/download/tor/)から対象OSのファイルをダウンロードして任意のフォルダに展開しておく
-* Windows版の場合 `tor-expert-bundle-windows-XXX-XX.X.X\tor\tor.exe` のパスを指定する
+- [公式サイト](https://www.torproject.org/ja/download/tor/)から対象OSのファイルをダウンロードして任意のフォルダに展開しておく
+- Windows版の場合 `tor-expert-bundle-windows-XXX-XX.X.X\tor\tor.exe` のパスを指定する
 
 #### ブラウザ版のTorを使用している場合
 
-* `Tor Browser\Browser\TorBrowser\Tor\tor.exe` のパスを指定しても同様の動作が可能
+- `Tor Browser\Browser\TorBrowser\Tor\tor.exe` のパスを指定しても同様の動作が可能
 
 ### 対象API
 
-* https://ipinfo.io
-  * IPアドレスを表示するAPIを提供するサイト
+- https://ipinfo.io
+  - IPアドレスを表示するAPIを提供するサイト
 
 ---
 
@@ -44,21 +44,21 @@
 
 > requests.exceptions.InvalidSchema: Missing dependencies for SOCKS support.
 
-* 上記のエラーはrequestsライブラリがSOCKSプロキシのサポートに必要な依存関係を満たしていない場合に発生する
-* 解決策の一つとしてrequestsライブラリにSOCKSサポートを追加するパッケージをインストールする
+- 上記のエラーはrequestsライブラリがSOCKSプロキシのサポートに必要な依存関係を満たしていない場合に発生する
+- 解決策の一つとしてrequestsライブラリにSOCKSサポートを追加するパッケージをインストールする
 
 ### 対応手順
 
-1. **requests** と **requests[socks]** パッケージをアンインストールする
+1. `requests` と `requests[socks]` パッケージをアンインストールする
 
     ```bash
     uv remove requests requests[socks]
     ```
 
-2. **requests**、 **requests[socks]**、 **PySocks** パッケージを再インストールする
+2. `requests`、 `requests[socks]`、 `PySocks` パッケージを再インストールする
 
     ```bash
     uv add requests requests[socks] PySocks
     ```
 
-    * PySocksはSOCKSプロキシのサポートを提供するための補助パッケージ
+    - PySocksはSOCKSプロキシのサポートを提供するための補助パッケージ

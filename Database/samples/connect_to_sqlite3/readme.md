@@ -17,13 +17,13 @@ CSVファイルからSQLite3のDBを作成する
 
 #### 作成情報
 
-* DB名：test.db
-* テーブル名：menu_list
-* カラム名
-  * menu
-  * category
-  * price
-  * cal
+- DB名：test.db
+- テーブル名：menu_list
+- カラム名
+  - menu
+  - category
+  - price
+  - cal
 
 ---
 
@@ -31,7 +31,7 @@ CSVファイルからSQLite3のDBを作成する
 
 ### 処理概要
 
-上記 **create_table_from_csv.py** で作成したDBに接続する
+上記 create_table_from_csv.py で作成したDBに接続する
 
 #### 処理内容
 
@@ -42,8 +42,8 @@ CSVファイルからSQLite3のDBを作成する
 
 #### 対象テーブル名
 
-* 上記 create_table_from_csv.py で作成した **menu_list** を対象とする
+- 上記 create_table_from_csv.py で作成した `menu_list` を対象とする
 
 #### 実行SQL
 
-* 変数 **query** に格納する
+- 変数 `query` に格納する

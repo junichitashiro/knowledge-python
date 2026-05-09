@@ -12,10 +12,10 @@
 
 ### 事前準備
 
-* リクルートWEBサービスのページでAPIキーを発行しておく
-* https://webservice.recruit.co.jp/
+- リクルートWEBサービスのページでAPIキーを発行しておく
+- https://webservice.recruit.co.jp/
 
 ### 補足
 
-* APIリファレンスは下記を参照
-* https://webservice.recruit.co.jp/doc/hotpepper/reference.html
+- APIリファレンスは下記を参照
+- https://webservice.recruit.co.jp/doc/hotpepper/reference.html

@@ -12,10 +12,10 @@
 
 ### 事前準備
 
-* Rakuten WebserviceのページでアプリIDを発行しておく
-* https://webservice.rakuten.co.jp/documentation/books-total-search
+- Rakuten WebserviceのページでアプリIDを発行しておく
+- https://webservice.rakuten.co.jp/documentation/books-total-search
 
 ### 補足
 
-* API詳細は下記を参照
-* https://webservice.rakuten.co.jp/documentation/books-total-search
+- API詳細は下記を参照
+- https://webservice.rakuten.co.jp/documentation/books-total-search
