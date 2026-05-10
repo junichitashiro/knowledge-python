@@ -1,5 +1,5 @@
 [project]
-name = "timetable-to-text"
+name = "timetable-scraper"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
