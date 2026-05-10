@@ -6,8 +6,8 @@
 
 ### 事前準備
 
-* proxy認証に必要なマニフェストファイルを生成するコードを作成し配置しておく
-* このファイルはスクレイピング実行時に外部モジュールとしてインポートされる
+- proxy認証に必要なマニフェストファイルを生成するコードを作成し配置しておく
+- このファイルはスクレイピング実行時に外部モジュールとしてインポートされる
 
 ### マニフェストファイル生成コードのサンプル
 
@@ -17,10 +17,10 @@
 def make_plugin():
     import zipfile
 
-    PROXY_HOST = 'host or ip'
-    PROXY_PORT = 80 # port番号
-    PROXY_USER = 'ユーザーネーム' # username
-    PROXY_PASS = 'パスワード' # password
+    PROXY_HOST = "host or ip"
+    PROXY_PORT = 80  # port番号
+    PROXY_USER = "ユーザーネーム"  # username
+    PROXY_PASS = "パスワード"  # password
 
     manifest_json = """
     {
@@ -74,8 +74,8 @@ def make_plugin():
     );
     """ % (PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASS)
 
-    pluginfile = 'proxy_auth_plugin.zip'
-    with zipfile.ZipFile(pluginfile, 'w') as zp:
+    pluginfile = "proxy_auth_plugin.zip"
+    with zipfile.ZipFile(pluginfile, "w") as zp:
         zp.writestr("manifest.json", manifest_json)
         zp.writestr("background.js", background_js)
 ```
@@ -86,8 +86,8 @@ def make_plugin():
 
 ### chrome_options.add_extension (pluginfile)
 
-* 認証に必要なマニフェストファイルをオプションで指定する
-* 実行の都度マニフェストファイルの存在をチェックし、なければ生成する
+- 認証に必要なマニフェストファイルをオプションで指定する
+- 実行の都度マニフェストファイルの存在をチェックし、なければ生成する
 
 ```python
 from pathlib import Path
@@ -103,20 +103,20 @@ import proxy_auth_plugin as proxy
 # 初期処理
 # ========================================
 # ChromeDriverをダウンロードしてパスを定数に格納する
-CHROMEDRIVER = chromedriver_binary_sync.download(download_dir='chromedriver')
+CHROMEDRIVER = chromedriver_binary_sync.download(download_dir="chromedriver")
 chrome_service = Service(executable_path=CHROMEDRIVER)
 
 # オプション用のパス指定
-pluginfile = Path.cwd() / 'proxy_auth_plugin.zip'
-dl_folder = 'C:\temp'
+pluginfile = Path.cwd() / "proxy_auth_plugin.zip"
+dl_folder = "C:\temp"
 
 if not Path.exists(pluginfile):
     proxy.make_plugin()
 
 # オプション設定
 chrome_options = Options()
-chrome_options.add_experimental_option('excludeSwitches', ['enable-automation'])
-chrome_options.add_experimental_option('prefs', {'download.default_directory': dl_folder})
+chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+chrome_options.add_experimental_option("prefs", {"download.default_directory": dl_folder})
 chrome_options.add_extension(str(pluginfile))
 
 
@@ -127,5 +127,5 @@ chrome_options.add_extension(str(pluginfile))
 driver = WebDriver(service=chrome_service, options=chrome_options)
 
 # proxy認証が必要なURLを開く
-driver.get('proxy認証が必要なURL')
+driver.get("proxy認証が必要なURL")
 ```

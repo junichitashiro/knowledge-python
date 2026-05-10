@@ -29,7 +29,7 @@ from selenium.webdriver.common.keys import Keys
 # 初期処理
 # ========================================
 # ChromeDriverをダウンロードしてパスを定数に格納する
-CHROMEDRIVER = chromedriver_binary_sync.download(download_dir='chromedriver')
+CHROMEDRIVER = chromedriver_binary_sync.download(download_dir="chromedriver")
 chrome_service = Service(executable_path=CHROMEDRIVER)
 
 
@@ -40,18 +40,18 @@ chrome_service = Service(executable_path=CHROMEDRIVER)
 driver = WebDriver(service=chrome_service)
 
 # 指定するURLを開く
-driver.get('https://www.google.com/')
+driver.get("https://www.google.com/")
 
 # XPathで検索ボックスを特定する
 search_box_xpath = '//*[@id="APjFqb"]'
-driver.find_element(By.XPATH, search_box_xpath).send_keys('Selenium実践入門')
+driver.find_element(By.XPATH, search_box_xpath).send_keys("Selenium実践入門")
 
 # NAMEで検索ボックスを特定して入力文字をクリアする
-search_box_name = 'q'
+search_box_name = "q"
 driver.find_element(By.NAME, search_box_name).clear()
 
 # 再度検索文字を入力して検索の3秒後にブラウザを閉じる
-driver.find_element(By.XPATH, search_box_xpath).send_keys('Selenium実践入門' + Keys.RETURN)
+driver.find_element(By.XPATH, search_box_xpath).send_keys("Selenium実践入門" + Keys.RETURN)
 time.sleep(3)
 driver.quit()
 ```
@@ -62,11 +62,11 @@ driver.quit()
 
 ### chromedriver_binary_sync.download()
 
-* ブラウザのバージョンに合わせたChromeDriverをダウンロードする
-* ダウンロードフォルダの指定が可能
-* 実行すると使用するChromeDriverのパスを返す
-* 以前使用していた **ChromeDriverManager().install()** から変更
-* 下記はダウンロードと同時に定数 **CHROMEDRIVER** に実行ファイルパスを格納する設定
+- ブラウザのバージョンに合わせたChromeDriverをダウンロードする
+- ダウンロードフォルダの指定が可能
+- 実行すると使用するChromeDriverのパスを返す
+- 以前使用していた `ChromeDriverManager().install()` から変更
+- 下記はダウンロードと同時に定数 `CHROMEDRIVER` に実行ファイルパスを格納する設定
 
   ```python
   CHROMEDRIVER = chromedriver_binary_sync.download(download_dir='chromedriver')
@@ -74,9 +74,9 @@ driver.quit()
 
 ### selenium.webdriver.chrome.service.Service(executable_path='ChromeDriverのパス')
 
-* 実行時にChromeDriverのパスを指定するのが推奨となっている
-* 指定しないと警告が表示されるので表示されないために設定する
-* 下記は **chromedriver_binary_sync.download()** で返ってくるパスを格納した定数を設定している
+- 実行時にChromeDriverのパスを指定するのが推奨となっている
+- 指定しないと警告が表示されるので表示されないために設定する
+- 下記は `chromedriver_binary_sync.download()` で返ってくるパスを格納した定数を設定している
 
   ```python
   chrome_service = Service(executable_path=CHROMEDRIVER)
@@ -84,7 +84,7 @@ driver.quit()
 
 ### selenium.webdriver.chrome.webdriver.WebDriver().implicitly_wait(XX)
 
-* 要素が見つかるまで指定秒数待つ
+- 要素が見つかるまで指定秒数待つ
 
 ---
 
@@ -92,16 +92,16 @@ driver.quit()
 
 ### selenium.webdriver.chrome.options.Options()
 
-* オプションを指定するためのクラス
+- オプションを指定するためのクラス
 
 #### add_argument('--headless')
 
-* ヘッドレスモードで起動する関数と引数
-* ブラウザを表示させずにバックグラウンドで処理する
+- ヘッドレスモードで起動する関数と引数
+- ブラウザを表示させずにバックグラウンドで処理する
 
 #### add_argument('--user-data-dir=' + PROFILE_PATH)
 
-* 起動するChromeのアカウントを指定する
+- 起動するChromeのアカウントを指定する
 
   ```python
   PROFILE_PATH = r'C:\Users\---\AppData\Local\Google\Chrome\User Data'
@@ -110,8 +110,8 @@ driver.quit()
 
 #### add_experimental_option('excludeSwitches', ['enable-automation'])
 
-* ブラウザ起動時のテスト実行警告を非表示にする
-* 指定しないとブラウザに以下のメッセージが表示される
+- ブラウザ起動時のテスト実行警告を非表示にする
+- 指定しないとブラウザに以下のメッセージが表示される
 
   ```
   Chrome は 自動テスト ソフトウェアによって制御されています。
@@ -119,9 +119,9 @@ driver.quit()
 
 #### add_experimental_option('excludeSwitches', ['enable-logging'])
 
-* DevToolsのログを出力しない
-* 指定しないとコンソールに以下のようなログが表示される
-* 無視しても良いので非表示にする
+- DevToolsのログを出力しない
+- 指定しないとコンソールに以下のようなログが表示される
+- 無視しても良いので非表示にする
 
   ```bash
   DevTools listening on ws://127.0.0.1:52518/devtools/browser/85b4357a-7fc7-4969-a3f0-e6c235eecc03
@@ -130,11 +130,11 @@ driver.quit()
 
 #### add_experimental_option('excludeSwitches', ['enable-automation', 'enable-logging'])
 
-* 上記のテスト実行警告とDevToolsのログを非表示にする指定の仕方
+- 上記のテスト実行警告とDevToolsのログを非表示にする指定の仕方
 
 #### add_experimental_option('prefs', {'download.default_directory': 'ディレクトリパス'})
 
-* ブラウザのダウンロードフォルダを指定する
+- ブラウザのダウンロードフォルダを指定する
 
 ---
 
@@ -154,18 +154,18 @@ from selenium.webdriver.common.keys import Keys
 # 初期処理
 # ========================================
 # ChromeDriverをダウンロードしてパスを定数に格納する
-CHROMEDRIVER = chromedriver_binary_sync.download(download_dir='chromedriver')
+CHROMEDRIVER = chromedriver_binary_sync.download(download_dir="chromedriver")
 chrome_service = Service(executable_path=CHROMEDRIVER)
 
 # オプションを設定する
 chrome_options = Options()
 # ヘッドレスモードで起動する
-chrome_options.add_argument('--headless')
+chrome_options.add_argument("--headless")
 # テスト実行警告とDevToolsのログを非表示
-chrome_options.add_experimental_option('excludeSwitches', ['enable-automation', 'enable-logging'])
+chrome_options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])
 # ファイルのダウンロードフォルダを指定する
-dl_folder = 'C:\temp'
-chrome_options.add_experimental_option('prefs', {'download.default_directory': dl_folder})
+dl_folder = "C:\temp"
+chrome_options.add_experimental_option("prefs", {"download.default_directory": dl_folder})
 
 
 # ========================================
@@ -179,18 +179,18 @@ driver.maximize_window()
 driver.implicitly_wait(10)
 
 # 指定したURLを開く
-driver.get('https://www.google.com/')
+driver.get("https://www.google.com/")
 
 # XPathで検索ボックスを特定する
 search_box_xpath = '//*[@id="APjFqb"]'
-driver.find_element(By.XPATH, search_box_xpath).send_keys('Selenium実践入門')
+driver.find_element(By.XPATH, search_box_xpath).send_keys("Selenium実践入門")
 
 # NAMEで検索ボックスを特定して入力文字をクリアする
-search_box_name = 'q'
+search_box_name = "q"
 driver.find_element(By.NAME, search_box_name).clear()
 
 # 再度検索文字を入力して検索の3秒後にブラウザを閉じる
-driver.find_element(By.XPATH, search_box_xpath).send_keys('Selenium実践入門' + Keys.RETURN)
+driver.find_element(By.XPATH, search_box_xpath).send_keys("Selenium実践入門" + Keys.RETURN)
 time.sleep(3)
 driver.quit()
 ```

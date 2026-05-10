@@ -10,97 +10,153 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 
 # ========================================
+# 定数
+# ========================================
+CSV_FILE = Path.cwd() / "input.csv"
+TARGET_URL = "https://keisan.casio.jp/exec/system/1183427246/"
+CHROMEDRIVER_DIR = "chromedriver"
+
+# 入力フォームの XPath
+XPATH = {
+    "age": '//*[@id="var_age"]',
+    "sex_男": '//*[@id="inparea"]/tbody/tr[2]/td[2]/ul/ol/li[5]/label[1]',
+    "sex_女": '//*[@id="inparea"]/tbody/tr[2]/td[2]/ul/ol/li[5]/label[2]',
+    "act_低い": '//*[@id="inparea"]/tbody/tr[3]/td[2]/ul/ol/li[1]/label[1]',
+    "act_ふつう": '//*[@id="inparea"]/tbody/tr[3]/td[2]/ul/ol/li[1]/label[2]',
+    "act_高い": '//*[@id="inparea"]/tbody/tr[3]/td[2]/ul/ol/li[1]/label[3]',
+    "weight": '//*[@id="var_kg"]',
+    "result": '//*[@id="ans0"]',
+    "execute": '//*[@id="executebtn"]',
+    "clear": '//*[@id="clearbtn"]',
+}
+
+
+# ========================================
 # 初期処理
 # ========================================
-# メッセージ表示に Tkinter を使う
-root = tk.Tk()
-root.withdraw()
+def load_csv(csv_file: Path) -> list[list[str]]:
+    """CSVファイルを読み込んで全行を返す。
 
-# CSVファイルの読み込み
-csv_file = Path.cwd() / 'input.csv'
+    Args:
+        csv_file: CSVファイルのパス
 
-if csv_file.exists():
-    with open(csv_file, mode='r', encoding='utf8') as f:
-        reader = csv.reader(f)
-        line = [row for row in reader]
+    Returns:
+        全行データ（1行目はヘッダ行）
 
-    input_row = len(line)
-    print('処理対象件数： ' + str(input_row - 1))
+    Note:
+        ファイルが存在しない場合、またはデータ行が0件の場合はエラーを表示して終了する。
+    """
+    if not csv_file.exists():
+        messagebox.showerror(
+            "ファイルチェックエラー",
+            "カレントディレクトリに input.csv が存在しないため処理を終了します。",
+        )
+        raise SystemExit
 
-    if input_row < 2:
-        messagebox.showwarning('件数チェックエラー', '処理対象データがないため処理を終了します。')
-        exit()
+    with open(csv_file, mode="r", encoding="utf-8") as f:
+        rows = list(csv.reader(f))
 
-else:
-    messagebox.showerror('ファイルチェックエラー', 'カレントディレクトリに input.csv が存在しないため処理を終了します。')
-    exit()
+    # ヘッダ行のみの場合は処理対象なし
+    if len(rows) < 2:
+        messagebox.showwarning("件数チェックエラー", "処理対象データがないため処理を終了します。")
+        raise SystemExit
 
-# ChromeDriverをダウンロードしてパスを定数に格納する
-CHROMEDRIVER = chromedriver_binary_sync.download(download_dir='chromedriver')
-chrome_service = Service(executable_path=CHROMEDRIVER)
+    return rows
 
-# オプションの設定
-chrome_options = Options()
-chrome_options.add_experimental_option('excludeSwitches', ['enable-automation', 'enable-logging'])
+
+def build_driver() -> WebDriver:
+    """ChromeDriver をダウンロードし、WebDriver を生成して返す。"""
+    chromedriver_path = chromedriver_binary_sync.download(download_dir=CHROMEDRIVER_DIR)
+    service = Service(executable_path=chromedriver_path)
+
+    options = Options()
+    options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])
+
+    return WebDriver(service=service, options=options)
+
 
 # ========================================
 # メイン処理
 # ========================================
-print('>>>処理開始')
-driver = WebDriver(service=chrome_service, options=chrome_options)
+def input_row_to_browser(driver: WebDriver, row: list[str], index: int, total: int) -> None:
+    """1行分のデータをブラウザに入力し、計算結果をメッセージボックスで表示する。
 
-driver.maximize_window()
-driver.implicitly_wait(10)
-driver.get('https://keisan.casio.jp/exec/system/1183427246/')
+    Args:
+        driver: 操作対象の WebDriver
+        row:    CSVの1行データ（年齢, 性別, 身体活動レベル, 目標体重）
+        index:  現在の処理行番号（1始まり）
+        total:  処理対象の総件数
+    """
+    age, sex, act_level, weight = row
 
-# 入力に使用する画面要素の設定
-age_xpath = '//*[@id="var_age"]'
-sx0_xpath = '//*[@id="inparea"]/tbody/tr[2]/td[2]/ul/ol/li[5]/label[1]'
-sx1_xpath = '//*[@id="inparea"]/tbody/tr[2]/td[2]/ul/ol/li[5]/label[2]'
-alv1_xpath = '//*[@id="inparea"]/tbody/tr[3]/td[2]/ul/ol/li[1]/label[1]'
-alv2_xpath = '//*[@id="inparea"]/tbody/tr[3]/td[2]/ul/ol/li[1]/label[2]'
-alv3_xpath = '//*[@id="inparea"]/tbody/tr[3]/td[2]/ul/ol/li[1]/label[3]'
-kg_xpath = '//*[@id="var_kg"]'
-ans0_xpath = '//*[@id="ans0"]'
-execute_xpath = '//*[@id="executebtn"]'
-clear_xpath = '//*[@id="clearbtn"]'
+    # 年齢・体重の入力
+    driver.find_element(By.XPATH, XPATH["age"]).send_keys(age)
+    driver.find_element(By.XPATH, XPATH["weight"]).send_keys(weight)
 
-# ------------------------------
-# 情報の入力と計算の実行
-# ------------------------------
-for i in range(1, input_row):
-    age = line[i][0]
-    sex = line[i][1]
-    act_level = line[i][2]
-    weight = line[i][3]
+    # 性別の選択（想定外の値は無視）
+    sex_key = f"sex_{sex}"
+    if sex_key in XPATH:
+        driver.find_element(By.XPATH, XPATH[sex_key]).click()
 
-    driver.find_element(By.XPATH, age_xpath).send_keys(age)
+    # 身体活動レベルの選択（想定外の値は「ふつう」を選択）
+    act_key = f"act_{act_level}"
+    act_xpath = XPATH.get(act_key, XPATH["act_ふつう"])
+    driver.find_element(By.XPATH, act_xpath).click()
 
-    if sex == '男':
-        driver.find_element(By.XPATH, sx0_xpath).click()
-    elif sex == '女':
-        driver.find_element(By.XPATH, sx1_xpath).click()
-
-    if act_level == '低い':
-        driver.find_element(By.XPATH, alv1_xpath).click()
-    elif act_level == '高い':
-        driver.find_element(By.XPATH, alv3_xpath).click()
-    else:
-        driver.find_element(By.XPATH, alv2_xpath).click()
-
-    driver.find_element(By.XPATH, kg_xpath).send_keys(weight)
-
-    driver.find_element(By.XPATH, execute_xpath).click()
+    # 計算実行
+    driver.find_element(By.XPATH, XPATH["execute"]).click()
 
     # 計算結果の表示
-    energy = driver.find_element(By.XPATH, ans0_xpath).text
-    message = f'{i}／ {str(input_row - 1)}件目\n１日に必要なエネルギー量は {energy} Kcalです'
-    messagebox.showinfo('計算結果', message)
-    driver.find_element(By.XPATH, clear_xpath).click()
+    energy = driver.find_element(By.XPATH, XPATH["result"]).text
+    message = f"{index}／{total}件目\n１日に必要なエネルギー量は {energy} Kcalです"
+    messagebox.showinfo("計算結果", message)
+
+    driver.find_element(By.XPATH, XPATH["clear"]).click()
+
+
+def run(rows: list[list[str]], driver: WebDriver) -> None:
+    """ヘッダ行を除いた全データ行をブラウザに入力する。
+
+    Args:
+        rows:   CSVの全行データ（1行目はヘッダ行）
+        driver: 操作対象の WebDriver
+    """
+    data_rows = rows[1:]  # ヘッダ行を除外
+    total = len(data_rows)
+    print(f"処理対象件数： {total}")
+    print(">>> 処理開始")
+
+    driver.maximize_window()
+    driver.implicitly_wait(10)
+    driver.get(TARGET_URL)
+
+    for index, row in enumerate(data_rows, start=1):
+        input_row_to_browser(driver, row, index, total)
+
 
 # ========================================
 # 終了処理
 # ========================================
-print('<<<処理終了')
-messagebox.showinfo('処理終了', '処理が終了しました')
-driver.quit()
+def teardown(driver: WebDriver) -> None:
+    """処理終了のメッセージを表示し、ブラウザを閉じる。"""
+    print("<<< 処理終了")
+    messagebox.showinfo("処理終了", "処理が終了しました")
+    driver.quit()
+
+
+# ========================================
+# エントリーポイント
+# ========================================
+if __name__ == "__main__":
+    # ※ Tkinter のウィンドウ本体は非表示にしてメッセージボックスのみ使用する
+    root = tk.Tk()
+    root.withdraw()
+
+    rows = load_csv(CSV_FILE)
+    driver = build_driver()
+
+    try:
+        run(rows, driver)
+    finally:
+        # 例外発生時もブラウザを確実に閉じる
+        teardown(driver)
