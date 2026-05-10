@@ -1,0 +1,10 @@
+[project]
+name = "starbucks-store-scraper"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "chromedriver-binary-sync>=0.2.2",
+    "selenium>=4.43.0",
+]
